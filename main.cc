@@ -80,7 +80,7 @@ int main(int argc, char** argv)
              cout<<"bye!"<<std::endl;
             sqlite3_close(DB);
             return 0;
-        } else if (user_input == "print") {
+        } else if (user_input == "show") {
             string print_what; 
             cin>>print_what;
             if(print_what == "all"){
@@ -129,10 +129,10 @@ int main(int argc, char** argv)
             std::cout<<"    open   -> opens an existing profile/database for you "<<std::endl;
             std::cout<<"    quit   -> close the game chooser application "<<std::endl;
             std::cout<<"    add    -> add a game into the database "<<std::endl;
-            std::cout<<"    print  "<<std::endl;
+            std::cout<<"    show  "<<std::endl;
             std::cout<<"            all  -> outputs all games in the database "<<std::endl;
             std::cout<<"            [genre]  -> outputs all games in the database that have a matching genre "<<std::endl;
-
+            std::cout<<"            num_players [#]  -> outputs all games that a specified number of player can play "<<std::endl;
         } else {
             std::cout<<"Unrecognized Command"<<std::endl;
         }
