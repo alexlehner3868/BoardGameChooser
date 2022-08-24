@@ -5,6 +5,7 @@
  * Support optional max players 
  * Printing by genre, num players, etc 
  * Add help, that prints all options 
+ * Add letting games name be more than one word 
  */
 
 #include <iostream>
@@ -95,8 +96,18 @@ int main(int argc, char** argv)
                 cin>>num_players;
                 string sql = "SELECT NAME FROM GAMES WHERE " + quotesql(to_string(num_players)) + " BETWEEN MIN_PLAYERS AND MAX_PLAYERS;"; 
                 action_succes = sqlite3_exec(DB, sql.c_str(), callback, NULL, NULL);
+            }else if(print_what == "short"){ // less than 25 minutes 
+                string sql = "SELECT NAME, AVG_GAME_LENGTH FROM GAMES WHERE AVG_GAME_LENGTH <= 25;";
+                action_succes = sqlite3_exec(DB, sql.c_str(), callback, NULL, NULL);
+            }else if(print_what == "medium"){ // 25 to an hour 
+                string sql = "SELECT NAME, AVG_GAME_LENGTH FROM GAMES WHERE AVG_GAME_LENGTH BETWEEN" + quotesql("25") + "AND "+ quotesql("60") + ";";
+                action_succes = sqlite3_exec(DB, sql.c_str(), callback, NULL, NULL);
+            }else if(print_what == "long"){ // over an hour
+                string sql = "SELECT NAME, AVG_GAME_LENGTH FROM GAMES WHERE AVG_GAME_LENGTH > 60;";
+                action_succes = sqlite3_exec(DB, sql.c_str(), callback, NULL, NULL);
             }else{
-                //print num plauers and num times and individual games and num length
+                //print individual games (by name) and num length
+                cout<<"Unrecognized command"<<endl;
             }
             if (action_succes != SQLITE_OK) {
                 cout<<"Error printing database"<<std::endl;
@@ -132,7 +143,11 @@ int main(int argc, char** argv)
             std::cout<<"    show  "<<std::endl;
             std::cout<<"            all  -> outputs all games in the database "<<std::endl;
             std::cout<<"            [genre]  -> outputs all games in the database that have a matching genre "<<std::endl;
+            std::cout<<"                genres: [party, word, trivia, strategy, children, card, deduction]"<<std::endl;
             std::cout<<"            num_players [#]  -> outputs all games that a specified number of player can play "<<std::endl;
+            std::cout<<"            short  -> outputs games that a take 25 minutes or less to play "<<std::endl;
+            std::cout<<"            medium  -> outputs games that take between 25 to 60 minutes to play"<<std::endl;
+            std::cout<<"            long  -> outputs games that take over 60 minutes to play "<<std::endl;
         } else {
             std::cout<<"Unrecognized Command"<<std::endl;
         }
